@@ -11,6 +11,9 @@
 
 #include "parser.h"
 #include "command.h"
+#include "hashmap.h"
+
+hashmap *global_map;
 
 // Structure pour stocker les informations du thread
 struct th_info {
@@ -25,7 +28,7 @@ void *handle_client(void *pctx) {
 
     int read_bytes = read(client_fd, buffer, 1024);
     if (read_bytes > 0) {
-        buffer[read_bytes] = '\0';
+        buffer[read_bytes] = '\0'; 
         printf("Reçu : %s\n", buffer); // Log pour débogage
 
         Command cmd = parse_command(buffer);
@@ -34,6 +37,9 @@ void *handle_client(void *pctx) {
         switch (cmd.type) {
             case CMD_PING:
                 response = handle_ping_command(cmd.argument);
+                break;
+            case CMD_SET:
+                response = handle_set_command(cmd.key, cmd.value);
                 break;
             default:
                 response = "-Commande inconnue\r\n";
@@ -74,6 +80,8 @@ int main(int argc, char const *argv[]) {
     int sock = 0;
     int server_ready = 0;
     struct addrinfo *tmp;
+
+    global_map = hashmap_create();
 
     for (tmp = result; tmp != NULL; tmp = tmp->ai_next) {
         sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
@@ -128,6 +136,8 @@ int main(int argc, char const *argv[]) {
         pthread_create(&th, NULL, handle_client, (void *)ctx);
     }
 
+    hashmap_free(global_map);    
+    
     close(sock);
     freeaddrinfo(result);
 
