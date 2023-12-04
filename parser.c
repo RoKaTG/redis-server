@@ -1,9 +1,7 @@
+#include "parser.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "parser.h"
-
 
 Command parse_command(const char *input) {
     Command cmd;
@@ -18,9 +16,19 @@ Command parse_command(const char *input) {
         } else {
             line_count++;
             if (line_count == 1) {
-                if (strcmp(line, "PING") == 0) cmd.type = CMD_PING;
+                if (strcmp(line, "PING") == 0) {
+                    cmd.type = CMD_PING;
+                } else if (strcmp(line, "SET") == 0) {
+                    cmd.type = CMD_SET;
+                }
             } else if (line_count == 2) {
-                strncpy(cmd.argument, line, sizeof(cmd.argument) - 1);
+                if (cmd.type == CMD_SET) {
+                    strncpy(cmd.key, line, sizeof(cmd.key) - 1);
+                } else {
+                    strncpy(cmd.argument, line, sizeof(cmd.argument) - 1);
+                }
+            } else if (line_count == 3 && cmd.type == CMD_SET) {
+                strncpy(cmd.value, line, sizeof(cmd.value) - 1);
             }
         }
         line = strtok(NULL, "\r\n");
@@ -31,4 +39,3 @@ Command parse_command(const char *input) {
 
     return cmd;
 }
-
