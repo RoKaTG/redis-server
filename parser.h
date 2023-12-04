@@ -15,6 +15,7 @@ typedef struct {
     CommandType type;
     char key[256];  
     char value[256]; 
+    char argument[256];
 } Command;
 
 

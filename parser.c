@@ -28,14 +28,3 @@ Command parse_command(const char *input) {
 
     return cmd;
 }
-
-int main() {
-    char input[512];
-
-    strcpy(input, "SET key1 value1");
-
-    Command cmd = parse_command(input);
-    printf("Command: %d, Key: %s, Value: %s\n", cmd.type, cmd.key, cmd.value);
-
-    return 0;
-}
