@@ -6,7 +6,6 @@
 
 const char* handle_ping_command(const char* argument) {
     static char response[1024];
-
     if (argument == NULL || strcmp(argument, "") == 0) {
         strcpy(response, "+PONG\r\n");
     } else {
