@@ -9,6 +9,8 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#include "parser.h"
+#include "command.h"
 
 // Structure pour stocker les informations du thread
 struct th_info {
@@ -19,30 +21,46 @@ struct th_info {
 void *handle_client(void *pctx) {
     struct th_info *ctx = (struct th_info *)pctx;
     int client_fd = ctx->fd;
+    char buffer[1024] = {0};
 
-    char welcome_msg[128];
-    snprintf(welcome_msg, 128, "Bienvenue, Client %d\n", ctx->i);
-    write(client_fd, welcome_msg, strlen(welcome_msg));
+    int read_bytes = read(client_fd, buffer, 1024);
+    if (read_bytes > 0) {
+        buffer[read_bytes] = '\0';
+        printf("Reçu : %s\n", buffer); // Log pour débogage
 
-    sleep(5);
+        Command cmd = parse_command(buffer);
+        const char* response;
+
+        switch (cmd.type) {
+            case CMD_PING:
+                response = handle_ping_command(cmd.argument);
+                break;
+            default:
+                response = "-Commande inconnue\r\n";
+        }
+
+        printf("Réponse : %s\n", response); // Log pour débogage
+        write(client_fd, response, strlen(response));
+    }
 
     close(client_fd);
-
     free(ctx);
 
     return NULL;
 }
+
 
 int main(int argc, char const *argv[]) {
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <port>\n", argv[0]);
         return 1;
     }
+
     struct addrinfo hints;
     memset(&hints, 0, sizeof(struct addrinfo));
 
-    hints.ai_family = AF_UNSPEC;       
-    hints.ai_socktype = SOCK_STREAM;   
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
     struct addrinfo *result = NULL;
@@ -84,13 +102,13 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
 
+    struct sockaddr_in client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
     int client_fd = -1;
-    struct sockaddr client_addr;
-    socklen_t client_addr_len;
     int i = 0;
 
     while (1) {
-        client_fd = accept(sock, &client_addr, &client_addr_len);
+        client_fd = accept(sock, (struct sockaddr *)&client_addr, &client_addr_len);
 
         if (client_fd < 0) {
             perror("accept");
@@ -111,6 +129,7 @@ int main(int argc, char const *argv[]) {
     }
 
     close(sock);
+    freeaddrinfo(result);
 
     return 0;
 }
