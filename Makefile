@@ -1,7 +1,7 @@
 TARGET = server
 CC = gcc
 CFLAGS = -Wall -g
-SRC = server.c parser.c command.c
+SRC = server.c parser.c command.c hashmap.c
 OBJ = $(SRC:.c=.o)
 
 all: $(TARGET)
