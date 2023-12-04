@@ -1,6 +1,8 @@
-#include "command.h"
 #include <string.h>
 #include <stdio.h>
+
+#include "command.h"
+
 
 const char* handle_ping_command(const char* argument) {
     static char response[256];
