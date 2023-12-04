@@ -26,3 +26,15 @@ const char* handle_set_command(const char *key, const char *value) {
     strcpy(response, "+OK\r\n");
     return response;
 }
+
+const char* handle_get_command(const char *key) {
+    static char response[1024];
+
+    char *value = hashmap_get(global_map, key);
+    if (value) {
+        snprintf(response, sizeof(response), "$%zu\r\n%s\r\n", strlen(value), value);
+    } else {
+        strcpy(response, "$-1\r\n");
+    }
+    return response;
+}
