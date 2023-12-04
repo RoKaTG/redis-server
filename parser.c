@@ -2,19 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum {
-    CMD_PING,
-    CMD_SET,
-    CMD_GET,
-    CMD_DEL,
-    CMD_UNKNOWN
-} CommandType;
+#include "parser.h"
 
-typedef struct {
-    CommandType type;
-    char key[256];
-    char value[256];
-} Command;
 
 Command parse_command(const char *input) {
     Command cmd;
