@@ -1,11 +1,7 @@
 TARGET = server
-
 CC = gcc
-
 CFLAGS = -Wall -g
-
-SRC = server.c parser.c
-
+SRC = server.c parser.c command.c
 OBJ = $(SRC:.c=.o)
 
 all: $(TARGET)
@@ -18,7 +14,3 @@ $(TARGET): $(OBJ)
 
 clean:
 	rm -f $(TARGET) $(OBJ)
-
-run: $(TARGET)
-	./$(TARGET)
-
