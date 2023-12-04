@@ -34,6 +34,10 @@ void *handle_client(void *pctx) {
 }
 
 int main(int argc, char const *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <port>\n", argv[0]);
+        return 1;
+    }
     struct addrinfo hints;
     memset(&hints, 0, sizeof(struct addrinfo));
 
