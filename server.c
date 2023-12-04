@@ -41,6 +41,9 @@ void *handle_client(void *pctx) {
             case CMD_SET:
                 response = handle_set_command(cmd.key, cmd.value);
                 break;
+            case CMD_GET:
+                response = handle_get_command(cmd.key);
+                break;
             default:
                 response = "-Commande inconnue\r\n";
         }
