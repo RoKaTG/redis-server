@@ -44,6 +44,9 @@ void *handle_client(void *pctx) {
             case CMD_GET:
                 response = handle_get_command(cmd.key);
                 break;
+            case CMD_DEL:
+                response = handle_del_command(cmd);
+                break;
             default:
                 response = "-Commande inconnue\r\n";
         }
