@@ -1,7 +1,8 @@
-#include "parser.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "parser.h"
 
 Command parse_command(const char *input) {
     Command cmd;
@@ -9,9 +10,11 @@ Command parse_command(const char *input) {
 
     char *line = strtok(input, "\r\n");
     int line_count = 0;
+    int key_index = 0;
 
     while (line != NULL) {
         if (line[0] == '*') {
+            sscanf(line, "*%d", &cmd.num_keys);
         } else if (line[0] == '$') {
         } else {
             line_count++;
@@ -22,20 +25,23 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_SET;
                 } else if (strcmp(line, "GET") == 0) {
                     cmd.type = CMD_GET;
+                } else if (strcmp(line, "DEL") == 0) {
+                    cmd.type = CMD_DEL;
                 }
-            } else if (line_count == 2) {
-                if (cmd.type == CMD_SET) {
-                    strncpy(cmd.key, line, sizeof(cmd.key) - 1);
-                } else if (cmd.type == CMD_GET) {
-                    strncpy(cmd.key, line, sizeof(cmd.key) - 1);
-                } else {
-                    strncpy(cmd.argument, line, sizeof(cmd.argument) - 1);
-                }
+            } else if (line_count == 2 && (cmd.type == CMD_SET || cmd.type == CMD_GET)) {
+                strncpy(cmd.key, line, sizeof(cmd.key) - 1);
             } else if (line_count == 3 && cmd.type == CMD_SET) {
                 strncpy(cmd.value, line, sizeof(cmd.value) - 1);
+            } else if (cmd.type == CMD_DEL && key_index < MAX_KEYS) {
+                strncpy(cmd.keys[key_index], line, sizeof(cmd.keys[0]) - 1);
+                key_index++;
             }
         }
         line = strtok(NULL, "\r\n");
+    }
+
+    if (cmd.type == CMD_DEL) {
+        cmd.num_keys = key_index;
     }
 
     return cmd;
