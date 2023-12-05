@@ -17,6 +17,7 @@ hashmap* hashmap_create();
 void hashmap_set(hashmap *h, const char *key, const char *value);
 char* hashmap_get(hashmap *h, const char *key);
 void hashmap_free(hashmap *h);
+int hashmap_remove(hashmap *h, const char *key);
 
 #endif // HASHMAP_H
 

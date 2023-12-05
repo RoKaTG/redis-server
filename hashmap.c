@@ -1,6 +1,7 @@
-#include "hashmap.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "hashmap.h"
 
 #define HASHMAP_SIZE 1024
 
@@ -69,5 +70,26 @@ void hashmap_free(hashmap *h) {
     }
     free(h->entries);
     free(h);
+}
+
+int hashmap_remove(hashmap *h, const char *key) {
+    unsigned int slot = hash(key);
+    hashmap_entry *entry = h->entries[slot];
+    hashmap_entry *prev = NULL;
+
+    while (entry != NULL) {
+        if (strcmp(entry->key, key) == 0) {
+            if (prev == NULL) {
+                h->entries[slot] = entry->next;
+            } else {
+                prev->next = entry->next;
+            }
+            free(entry);
+            return 1;
+        }
+        prev = entry;
+        entry = entry->next;
+    }
+    return 0;
 }
 
