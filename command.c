@@ -38,3 +38,38 @@ const char* handle_get_command(const char *key) {
     }
     return response;
 }
+
+/*const char* handle_del_command(Command cmd) {
+    static char response[256];
+    int count = 0;
+    for (int i = 0; i < cmd.num_keys; ++i) {
+        if (hashmap_remove(global_map, cmd.keys[i])) {
+            count++;
+        } else if (!hashmap_remove(global_map, cmd.keys[i]) && count > -1) {
+            count--;
+        }
+    }
+    snprintf(response, sizeof(response), ":%d\r\n", count + 1);
+    return response;
+}*/
+
+const char* handle_del_command(Command cmd) {
+    static char response[256];
+    int count = 0;
+
+    printf("Début de la suppression des clés. Nombre total de clés : %d\n", cmd.num_keys);
+
+    for (int i = 0; i < cmd.num_keys; ++i) {
+        printf("Tentative de suppression de la clé : %s\n", cmd.keys[i]);
+        if (hashmap_remove(global_map, cmd.keys[i])) {
+            count++;
+            printf("Clé supprimée : %s\n", cmd.keys[i]);
+        } else {
+            printf("Clé non trouvée : %s\n", cmd.keys[i]);
+        }
+    }
+
+    printf("Nombre total de clés supprimées : %d\n", count);
+    snprintf(response, sizeof(response), ":%d\r\n", count);
+    return response;
+}
