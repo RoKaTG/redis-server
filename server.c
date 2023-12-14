@@ -9,9 +9,12 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#include <signal.h>
+
 #include "parser.h"
 #include "command.h"
 #include "hashmap.h"
+#include "cJSON.h"
 
 hashmap *global_map;
 
@@ -20,6 +23,62 @@ struct th_info {
     int fd;  // Descripteur de fichier pour le socket client
     int i;   // Identifiant du client (pour référence)
 };
+
+void save_to_file(hashmap *h, const char *filename) {
+    FILE *file = fopen(filename, "w");
+    if (!file) return;
+
+    cJSON *root = cJSON_CreateObject();
+
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        hashmap_entry *entry = h->entries[i];
+        while (entry) {
+            cJSON_AddStringToObject(root, entry->key, entry->value);
+            entry = entry->next;
+        }
+    }
+
+    char *json_data = cJSON_Print(root);
+    fprintf(file, "%s", json_data);
+    free(json_data);
+    cJSON_Delete(root);
+    fclose(file);
+}
+
+
+void load_from_file(hashmap *h, const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (!file) return;
+
+    // Chercher la fin du fichier pour connaître sa taille
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    // Allouer la mémoire pour la chaîne
+    char *json_data = malloc(file_size + 1);
+    if (!json_data) {
+        fclose(file);
+        return;
+    }
+
+    // Lire le fichier dans la chaîne
+    fread(json_data, 1, file_size, file);
+    json_data[file_size] = '\0'; // Assurez-vous que la chaîne est terminée par NUL
+
+    cJSON *root = cJSON_Parse(json_data);
+    cJSON *current_element = NULL;
+    cJSON_ArrayForEach(current_element, root) {
+        const char *key = current_element->string;
+        const char *value = cJSON_GetStringValue(current_element);
+        hashmap_set(h, key, value);
+    }
+
+    cJSON_Delete(root);
+    free(json_data);
+    fclose(file);
+}
+
 
 void *handle_client(void *pctx) {
     struct th_info *ctx = (struct th_info *)pctx;
@@ -62,8 +121,14 @@ void *handle_client(void *pctx) {
     return NULL;
 }
 
+void signal_handler(int signum) {
+    printf("Arrêt du serveur...\n");
+    save_to_file(global_map, "data.json");
+    exit(signum);
+}
 
 int main(int argc, char const *argv[]) {
+    signal(SIGINT, signal_handler);
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <port>\n", argv[0]);
         return 1;
@@ -87,8 +152,10 @@ int main(int argc, char const *argv[]) {
     int sock = 0;
     int server_ready = 0;
     struct addrinfo *tmp;
-
+    
     global_map = hashmap_create();
+
+    load_from_file(global_map, "data.json");
 
     for (tmp = result; tmp != NULL; tmp = tmp->ai_next) {
         sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
@@ -147,6 +214,8 @@ int main(int argc, char const *argv[]) {
     
     close(sock);
     freeaddrinfo(result);
+
+    //save_to_file(global_map, "data.json");
 
     return 0;
 }
