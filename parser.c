@@ -28,6 +28,9 @@ Command parse_command(const char *input) {
                 } else if (strcmp(line, "DEL") == 0) {
                     cmd.type = CMD_DEL;
                 }
+            }
+            else if (line_count == 2 && cmd.type == CMD_PING) {
+                strncpy(cmd.argument, line, sizeof(cmd.argument) - 1);
             } else if (line_count == 2 && (cmd.type == CMD_SET || cmd.type == CMD_GET)) {
                 strncpy(cmd.key, line, sizeof(cmd.key) - 1);
             } else if (line_count == 3 && cmd.type == CMD_SET) {
