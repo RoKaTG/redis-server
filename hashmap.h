@@ -1,6 +1,8 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
+#define HASHMAP_SIZE 1024
+
 typedef struct hashmap_entry {
     char key[256];
     char value[256];
