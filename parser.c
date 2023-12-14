@@ -27,6 +27,8 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_GET;
                 } else if (strcmp(line, "DEL") == 0) {
                     cmd.type = CMD_DEL;
+                } else { 
+                    cmd.type = CMD_UNKNOWN;
                 }
             }
             else if (line_count == 2 && cmd.type == CMD_PING) {
