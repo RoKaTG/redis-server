@@ -109,6 +109,12 @@ void *handle_client(void *pctx) {
                 snprintf(exists_response, sizeof(exists_response), ":%d\r\n", exists_count);
                 response = exists_response;
                 break;
+            case CMD_APPEND:
+                int append_length = handle_append_command(cmd.key, cmd.value);
+                char append_response[256];
+                snprintf(append_response, sizeof(append_response), ":%d\r\n", append_length);
+                response = append_response;
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
