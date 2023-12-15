@@ -8,6 +8,7 @@ typedef enum {
     CMD_SET,
     CMD_GET,
     CMD_DEL,
+    CMD_EXISTS,
     CMD_UNKNOWN 
 } CommandType;
 

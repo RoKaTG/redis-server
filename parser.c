@@ -27,6 +27,8 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_GET;
                 } else if (strcmp(line, "DEL") == 0) {
                     cmd.type = CMD_DEL;
+                } else if (strcmp(line, "EXISTS") == 0) {
+                    cmd.type = CMD_EXISTS;
                 } else { 
                     cmd.type = CMD_UNKNOWN;
                 }
@@ -40,12 +42,15 @@ Command parse_command(const char *input) {
             } else if (cmd.type == CMD_DEL && key_index < MAX_KEYS) {
                 strncpy(cmd.keys[key_index], line, sizeof(cmd.keys[0]) - 1);
                 key_index++;
+            } else if (cmd.type == CMD_EXISTS && key_index < MAX_KEYS) {
+                strncpy(cmd.keys[key_index], line, sizeof(cmd.keys[0]) - 1);
+                key_index++;
             }
         }
         line = strtok(NULL, "\r\n");
     }
 
-    if (cmd.type == CMD_DEL) {
+    if (cmd.type == CMD_DEL || cmd.type == CMD_EXISTS) {
         cmd.num_keys = key_index;
     }
 
