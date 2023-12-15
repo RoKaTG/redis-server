@@ -73,3 +73,13 @@ const char* handle_del_command(Command cmd) {
     snprintf(response, sizeof(response), ":%d\r\n", count);
     return response;
 }
+
+int handle_exists_command( Command cmd) {
+    int count = 0;
+    for (int i = 0; i < cmd.num_keys; ++i) {
+        if (hashmap_get(global_map, cmd.keys[i]) != NULL) {
+            count++;
+        }
+    }
+    return count;
+}
