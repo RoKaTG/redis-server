@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "command.h"
 #include "hashmap.h"
@@ -82,4 +83,21 @@ int handle_exists_command( Command cmd) {
         }
     }
     return count;
+}
+
+int handle_append_command(const char *key, const char *value) {
+    char *existing_value = hashmap_get(global_map, key);
+    size_t new_length = strlen(value) + (existing_value ? strlen(existing_value) : 0);
+
+    char *new_value = malloc(new_length + 1);
+    if (existing_value) {
+        strcpy(new_value, existing_value);
+    }
+    strcat(new_value, value);
+
+    hashmap_set(global_map, key, new_value);
+    int appended_length = strlen(new_value);
+    free(new_value);
+
+    return appended_length;
 }
