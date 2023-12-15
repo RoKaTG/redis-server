@@ -50,21 +50,18 @@ void load_from_file(hashmap *h, const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) return;
 
-    // Chercher la fin du fichier pour connaître sa taille
     fseek(file, 0, SEEK_END);
     long file_size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    // Allouer la mémoire pour la chaîne
     char *json_data = malloc(file_size + 1);
     if (!json_data) {
         fclose(file);
         return;
     }
 
-    // Lire le fichier dans la chaîne
     fread(json_data, 1, file_size, file);
-    json_data[file_size] = '\0'; // Assurez-vous que la chaîne est terminée par NUL
+    json_data[file_size] = '\0'; 
 
     cJSON *root = cJSON_Parse(json_data);
     cJSON *current_element = NULL;
@@ -105,6 +102,12 @@ void *handle_client(void *pctx) {
                 break;
             case CMD_DEL:
                 response = handle_del_command(cmd);
+                break;
+            case CMD_EXISTS:
+                int exists_count = handle_exists_command(cmd);
+                char exists_response[256];
+                snprintf(exists_response, sizeof(exists_response), ":%d\r\n", exists_count);
+                response = exists_response;
                 break;
             case CMD_UNKNOWN:
             //default:
