@@ -45,6 +45,8 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_KEYS;
                 } else if (strcmp(line, "PTTL") == 0) {
                     cmd.type = CMD_PTTL;
+                } else if (strcmp(line, "RENAME") == 0) {
+                    cmd.type = CMD_RENAME;
                 } else { 
                     cmd.type = CMD_UNKNOWN;
                 }
@@ -84,6 +86,12 @@ Command parse_command(const char *input) {
             } else if (cmd.type == CMD_KEYS) {
                 if (line_count == 2) {
                     strncpy(cmd.key, line, sizeof(cmd.key) - 1);
+                }
+            } else if (cmd.type == CMD_RENAME) {
+                if (line_count == 2) {
+                    strncpy(cmd.key, line, sizeof(cmd.key) - 1);
+                } else if (line_count == 3) {
+                    strncpy(cmd.value, line, sizeof(cmd.value) - 1);
                 }
             }
         }
