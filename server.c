@@ -110,10 +110,7 @@ void *handle_client(void *pctx) {
                 response = handle_exists_command(cmd);
                 break;
             case CMD_APPEND:
-                int append_length = handle_append_command(cmd.key, cmd.value);
-                char append_response[256];
-                snprintf(append_response, sizeof(append_response), ":%d\r\n", append_length);
-                response = append_response;
+                response = handle_append_command(cmd.key, cmd.value);
                 break;
             case CMD_RANDOMKEY:
                 response = handle_randomkey_command(global_map);
