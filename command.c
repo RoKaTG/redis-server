@@ -195,6 +195,26 @@ const char* handle_ttl_command(const char *key) {
     return response;
 }
 
+const char* handle_pttl_command(const char *key) {
+    static char response[256];
+    long long current_time_ms = time(NULL) * 1000LL;
+
+    if (hashmap_get(global_map, key) == NULL) {
+        snprintf(response, sizeof(response), ":%d\r\n", -2);
+        return response;
+    }
+
+    long long expiration_time_ms = get_expiration_time_ms(expiration_map, key);
+    if (expiration_time_ms == 0) {
+        snprintf(response, sizeof(response), ":%d\r\n", -1);
+        return response;
+    }
+
+    int pttl = (int)(expiration_time_ms - current_time_ms);
+    snprintf(response, sizeof(response), ":%d\r\n", pttl > 0 ? pttl : -1);
+    return response;
+}
+
 int match_pattern(const char *pattern, const char *key) {
     while (*pattern && *key) {
         if (*pattern == '*') {
@@ -213,7 +233,6 @@ int match_pattern(const char *pattern, const char *key) {
     }
     return 0;
 }
-
 
 const char* handle_keys_command(const char *pattern) {
     static char response[10240]; 
@@ -244,4 +263,3 @@ const char* handle_keys_command(const char *pattern) {
 
     return response;
 }
-

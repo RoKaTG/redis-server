@@ -26,6 +26,7 @@ const char* handle_expire_command(const char *key, int seconds);
 const char* handle_pexpire_command(const char *key, int ms);
 const char* handle_persist_command(const char *key);
 const char* handle_ttl_command(const char *key);
+const char* handle_pttl_command(const char *key);
 
 int match_pattern(const char *pattern, const char *key);
 
