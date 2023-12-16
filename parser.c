@@ -37,6 +37,8 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_EXPIRE;
                 } else if (strcmp(line, "PEXPIRE") == 0) {
                     cmd.type = CMD_PEXPIRE;
+                } else if (strcmp(line, "PERSIST") == 0) {
+                    cmd.type = CMD_PERSIST;
                 } else { 
                     cmd.type = CMD_UNKNOWN;
                 }
@@ -64,6 +66,10 @@ Command parse_command(const char *input) {
                     strncpy(cmd.key, line, sizeof(cmd.key) - 1);
                 } else if (line_count == 3) {
                     strncpy(cmd.value, line, sizeof(cmd.value) - 1);
+                }
+            } else if (cmd.type == CMD_PERSIST) {
+                if (line_count == 2) {
+                    strncpy(cmd.key, line, sizeof(cmd.key) - 1);
                 }
             }
         }
