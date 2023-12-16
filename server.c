@@ -127,6 +127,9 @@ void *handle_client(void *pctx) {
             case CMD_TTL:
                 response = handle_ttl_command(cmd.key);
                 break;
+            case CMD_KEYS:
+                response = handle_keys_command(cmd.key);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
