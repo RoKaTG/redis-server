@@ -194,3 +194,54 @@ const char* handle_ttl_command(const char *key) {
     snprintf(response, sizeof(response), ":%d\r\n", ttl > 0 ? ttl : -1);
     return response;
 }
+
+int match_pattern(const char *pattern, const char *key) {
+    while (*pattern && *key) {
+        if (*pattern == '*') {
+            return 1;
+        }
+        if (*pattern != '?' && *pattern != *key) {
+            return 0;
+        }
+        pattern++;
+        key++;
+    }
+    if (*pattern == '\0' && *key == '\0') {
+        return 1;
+    } else if (*pattern == '*' || *pattern == '\0') {
+        return 1;
+    }
+    return 0;
+}
+
+
+const char* handle_keys_command(const char *pattern) {
+    static char response[10240]; 
+    char *response_ptr = response;
+    int count = 0;
+
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        hashmap_entry *entry = global_map->entries[i];
+        while (entry != NULL) {
+            if (strstr(entry->key, pattern) != NULL) {
+                count++;
+            }
+            entry = entry->next;
+        }
+    }
+
+    response_ptr += sprintf(response_ptr, "*%d\r\n", count);
+
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        hashmap_entry *entry = global_map->entries[i];
+        while (entry != NULL) {
+            if (strstr(entry->key, pattern) != NULL) {
+                response_ptr += sprintf(response_ptr, "$%zu\r\n%s\r\n", strlen(entry->key), entry->key);
+            }
+            entry = entry->next;
+        }
+    }
+
+    return response;
+}
+
