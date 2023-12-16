@@ -183,3 +183,16 @@ void expiration_map_free(expiration *map) {
     free(map->entries);
     free(map);
 }
+
+int expiration_map_exists(expiration *map, const char *key) {
+    int slot = hash(key);
+    expiration_entry *entry = map->entries[slot];
+
+    while (entry != NULL) {
+        if (strcmp(entry->key, key) == 0) {
+            return 1;
+        }
+        entry = entry->next;
+    }
+    return 0;
+}
