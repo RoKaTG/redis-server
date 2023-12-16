@@ -12,6 +12,7 @@ typedef enum {
     CMD_APPEND,
     CMD_RANDOMKEY,
     CMD_EXPIRE,
+    CMD_PEXPIRE,
     CMD_UNKNOWN 
 } CommandType;
 
