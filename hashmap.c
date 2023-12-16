@@ -93,3 +93,93 @@ int hashmap_remove(hashmap *h, const char *key) {
     return 0;
 }
 
+expiration* expiration_map_create() {
+    expiration *map = malloc(sizeof(expiration));
+    map->entries = malloc(sizeof(expiration_entry*) * HASHMAP_SIZE);
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        map->entries[i] = NULL;
+    }
+    return map;
+}
+
+void expiration_map_set(expiration *map, const char *key, time_t expiration_time) {
+    int slot = hash(key);
+    expiration_entry *entry = map->entries[slot];
+
+    while (entry != NULL) {
+        if (strcmp(entry->key, key) == 0) {
+            entry->expiration_time = expiration_time;
+            return;
+        }
+        entry = entry->next;
+    }
+
+    entry = malloc(sizeof(expiration_entry));
+    strncpy(entry->key, key, sizeof(entry->key));
+    entry->expiration_time = expiration_time;
+    entry->next = map->entries[slot];
+    map->entries[slot] = entry;
+}
+
+void expiration_map_remove(expiration *map, const char *key) {
+    int slot = hash(key);
+    expiration_entry *entry = map->entries[slot];
+    expiration_entry *prev = NULL;
+
+    while (entry != NULL) {
+        if (strcmp(entry->key, key) == 0) {
+            if (prev == NULL) {
+                map->entries[slot] = entry->next;
+            } else {
+                prev->next = entry->next;
+            }
+            free(entry);
+            return;
+        }
+        prev = entry;
+        entry = entry->next;
+    }
+}
+
+void check_and_remove_expired_keys(hashmap *h, expiration *map) {
+    time_t current_time = time(NULL);
+
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        expiration_entry *entry = map->entries[i];
+        expiration_entry *prev = NULL;
+
+        while (entry != NULL) {
+            if (entry->expiration_time <= current_time) {
+                hashmap_remove(h, entry->key);
+
+                if (prev == NULL) {
+                    map->entries[i] = entry->next;
+                } else {
+                    prev->next = entry->next;
+                }
+
+                expiration_entry *temp = entry;
+                entry = entry->next;
+                free(temp);
+            } else {
+                prev = entry;
+                entry = entry->next;
+            }
+        }
+    }
+}
+
+void expiration_map_free(expiration *map) {
+    if (map == NULL) return;
+
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        expiration_entry *entry = map->entries[i];
+        while (entry != NULL) {
+            expiration_entry *temp = entry;
+            entry = entry->next;
+            free(temp);
+        }
+    }
+    free(map->entries);
+    free(map);
+}
