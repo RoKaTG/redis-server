@@ -126,15 +126,32 @@ char* get_random_key(hashmap *h) {
 
 const char* handle_expire_command(const char *key, int seconds) {
     static char response[256];
-    time_t current_time = time(NULL);
-    time_t expiration_time = current_time + seconds;
+    long long current_time_ms = time(NULL) * 1000LL;
+    long long expiration_time_ms = current_time_ms + ((long long)seconds * 1000LL);
 
     if (hashmap_get(global_map, key) == NULL) {
         snprintf(response, sizeof(response), ":%d\r\n", 0);
         return response;
     }
 
-    expiration_map_set(expiration_map, key, expiration_time);
+    expiration_map_set(expiration_map, key, expiration_time_ms);
+
+    snprintf(response, sizeof(response), ":%d\r\n", 1);
+    return response;
+}
+
+
+const char* handle_pexpire_command(const char *key, int ms) {
+    static char response[256];
+    long long current_time_ms = time(NULL) * 1000LL;
+    long long expiration_time_ms = current_time_ms + ms;
+
+    if (hashmap_get(global_map, key) == NULL) {
+        snprintf(response, sizeof(response), ":%d\r\n", 0);
+        return response;
+    }
+
+    expiration_map_set(expiration_map, key, expiration_time_ms);
 
     snprintf(response, sizeof(response), ":%d\r\n", 1);
     return response;

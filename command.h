@@ -21,7 +21,8 @@ int handle_append_command(const char *key, const char *value);
 bool hashmap_is_empty(hashmap *h);
 char* get_random_key(hashmap *h);
 const char* handle_randomkey_command(hashmap *h);
-const char* handle_expire_command(const char *key, int seconds);
 
+const char* handle_expire_command(const char *key, int seconds);
+const char* handle_pexpire_command(const char *key, int ms);
 
 #endif // COMMAND_H
