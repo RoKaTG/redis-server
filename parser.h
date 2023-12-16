@@ -10,6 +10,8 @@ typedef enum {
     CMD_DEL,
     CMD_EXISTS,
     CMD_APPEND,
+    CMD_INCR,
+    CMD_RANDOMKEY,
     CMD_UNKNOWN 
 } CommandType;
 
