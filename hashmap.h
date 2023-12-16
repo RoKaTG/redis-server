@@ -40,5 +40,7 @@ void check_and_remove_expired_keys(hashmap *h, expiration *map);
 void expiration_map_free(expiration *map);
 int expiration_map_exists(expiration *map, const char *key);
 
+long long get_expiration_time_ms(expiration *map, const char *key);
+
 #endif // HASHMAP_H
 

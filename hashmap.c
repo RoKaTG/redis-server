@@ -196,3 +196,17 @@ int expiration_map_exists(expiration *map, const char *key) {
     }
     return 0;
 }
+
+long long get_expiration_time_ms(expiration *map, const char *key) {
+    int slot = hash(key);
+    expiration_entry *entry = map->entries[slot];
+
+    while (entry != NULL) {
+        if (strcmp(entry->key, key) == 0) {
+            return entry->expiration_time_ms;
+        }
+        entry = entry->next;
+    }
+    return 0;
+}
+
