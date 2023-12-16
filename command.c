@@ -170,3 +170,22 @@ const char* handle_persist_command(const char *key) {
     return response;
 }
 
+const char* handle_ttl_command(const char *key) {
+    static char response[256];
+    long long current_time_ms = time(NULL) * 1000LL;
+
+    if (hashmap_get(global_map, key) == NULL) {
+        snprintf(response, sizeof(response), ":%d\r\n", -2);
+        return response;
+    }
+
+    long long expiration_time_ms = get_expiration_time_ms(expiration_map, key);
+    if (expiration_time_ms == 0) {
+        snprintf(response, sizeof(response), ":%d\r\n", -1);
+        return response;
+    }
+
+    int ttl = (int)((expiration_time_ms - current_time_ms) / 1000LL);
+    snprintf(response, sizeof(response), ":%d\r\n", ttl > 0 ? ttl : -1);
+    return response;
+}
