@@ -156,3 +156,17 @@ const char* handle_pexpire_command(const char *key, int ms) {
     snprintf(response, sizeof(response), ":%d\r\n", 1);
     return response;
 }
+
+const char* handle_persist_command(const char *key) {
+    static char response[256];
+
+    if (hashmap_get(global_map, key) == NULL || !expiration_map_exists(expiration_map, key)) {
+        snprintf(response, sizeof(response), ":%d\r\n", 0);
+        return response;
+    }
+
+    expiration_map_remove(expiration_map, key);
+    snprintf(response, sizeof(response), ":%d\r\n", 1);
+    return response;
+}
+

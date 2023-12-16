@@ -24,5 +24,6 @@ const char* handle_randomkey_command(hashmap *h);
 
 const char* handle_expire_command(const char *key, int seconds);
 const char* handle_pexpire_command(const char *key, int ms);
+const char* handle_persist_command(const char *key);
 
 #endif // COMMAND_H
