@@ -61,15 +61,18 @@ const char* handle_del_command(Command cmd) {
     return response;
 }
 
-int handle_exists_command( Command cmd) {
+const char* handle_exists_command(Command cmd) {
+    static char response[256];
     int count = 0;
     for (int i = 0; i < cmd.num_keys; ++i) {
         if (hashmap_get(global_map, cmd.keys[i]) != NULL) {
             count++;
         }
     }
-    return count;
+    snprintf(response, sizeof(response), ":%d\r\n", count);
+    return response;
 }
+
 
 int handle_append_command(const char *key, const char *value) {
     char *existing_value = hashmap_get(global_map, key);
