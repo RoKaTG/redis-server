@@ -14,6 +14,7 @@ typedef enum {
     CMD_EXPIRE,
     CMD_PEXPIRE,
     CMD_PERSIST,
+    CMD_TTL,
     CMD_UNKNOWN 
 } CommandType;
 
