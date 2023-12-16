@@ -31,5 +31,6 @@ const char* handle_pttl_command(const char *key);
 int match_pattern(const char *pattern, const char *key);
 
 const char* handle_keys_command(const char *pattern);
+const char* handle_rename_command(const char *key, const char *newkey);
 
 #endif // COMMAND_H

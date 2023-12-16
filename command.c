@@ -263,3 +263,19 @@ const char* handle_keys_command(const char *pattern) {
 
     return response;
 }
+
+const char* handle_rename_command(const char *key, const char *newkey) {
+    static char response[256];
+
+    char *value = hashmap_get(global_map, key);
+    if (value == NULL) {
+        strcpy(response, "-ERR no such key\r\n");
+        return response;
+    }
+
+    hashmap_set(global_map, newkey, value);
+    hashmap_remove(global_map, key);
+
+    strcpy(response, "+OK\r\n");
+    return response;
+}
