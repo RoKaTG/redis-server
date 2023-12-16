@@ -5,6 +5,7 @@
 #include "command.h"
 
 extern hashmap *global_map;
+extern expiration *expiration_map;
 
 
 const char* handle_ping_command(const char* argument) {
@@ -121,4 +122,20 @@ char* get_random_key(hashmap *h) {
             return h->entries[index]->key;
         }
     }
+}
+
+const char* handle_expire_command(const char *key, int seconds) {
+    static char response[256];
+    time_t current_time = time(NULL);
+    time_t expiration_time = current_time + seconds;
+
+    if (hashmap_get(global_map, key) == NULL) {
+        snprintf(response, sizeof(response), ":%d\r\n", 0);
+        return response;
+    }
+
+    expiration_map_set(expiration_map, key, expiration_time);
+
+    snprintf(response, sizeof(response), ":%d\r\n", 1);
+    return response;
 }
