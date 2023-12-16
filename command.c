@@ -73,8 +73,8 @@ const char* handle_exists_command(Command cmd) {
     return response;
 }
 
-
-int handle_append_command(const char *key, const char *value) {
+const char* handle_append_command(const char *key, const char *value) {
+    static char response[256];
     char *existing_value = hashmap_get(global_map, key);
     size_t new_length = strlen(value) + (existing_value ? strlen(existing_value) : 0);
 
@@ -88,8 +88,10 @@ int handle_append_command(const char *key, const char *value) {
     int appended_length = strlen(new_value);
     free(new_value);
 
-    return appended_length;
+    snprintf(response, sizeof(response), ":%d\r\n", appended_length);
+    return response;
 }
+
 
 const char* handle_randomkey_command(hashmap *h) {
     static char response[256];
