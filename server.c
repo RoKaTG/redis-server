@@ -133,6 +133,9 @@ void *handle_client(void *pctx) {
             case CMD_KEYS:
                 response = handle_keys_command(cmd.key);
                 break;
+            case CMD_RENAME:
+                response = handle_rename_command(cmd.key, cmd.value);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
