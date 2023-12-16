@@ -107,10 +107,7 @@ void *handle_client(void *pctx) {
                 response = handle_del_command(cmd);
                 break;
             case CMD_EXISTS:
-                int exists_count = handle_exists_command(cmd);
-                char exists_response[256];
-                snprintf(exists_response, sizeof(exists_response), ":%d\r\n", exists_count);
-                response = exists_response;
+                response = handle_exists_command(cmd);
                 break;
             case CMD_APPEND:
                 int append_length = handle_append_command(cmd.key, cmd.value);
