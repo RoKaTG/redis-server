@@ -16,7 +16,10 @@
 #include "hashmap.h"
 #include "cJSON.h"
 
+#define CHECK_INTERVAL 5
+
 hashmap *global_map;
+expiration *expiration_map;
 
 // Structure pour stocker les informations du thread
 struct th_info {
@@ -118,6 +121,9 @@ void *handle_client(void *pctx) {
             case CMD_RANDOMKEY:
                 response = handle_randomkey_command(global_map);
                 break;
+            case CMD_EXPIRE:
+                response = handle_expire_command(cmd.key, atoi(cmd.value));
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
@@ -137,6 +143,13 @@ void signal_handler(int signum) {
     printf("Arrêt du serveur...\n");
     save_to_file(global_map, "data.json");
     exit(signum);
+}
+
+void *expiration_checker(void *arg) {
+    while (1) {
+        sleep(CHECK_INTERVAL); 
+        check_and_remove_expired_keys(global_map, expiration_map);
+    }
 }
 
 int main(int argc, char const *argv[]) {
@@ -166,8 +179,12 @@ int main(int argc, char const *argv[]) {
     struct addrinfo *tmp;
     
     global_map = hashmap_create();
+    expiration_map = expiration_map_create();
 
     load_from_file(global_map, "data.json");
+
+    pthread_t expiration_thread;
+    pthread_create(&expiration_thread, NULL, expiration_checker, NULL);
 
     for (tmp = result; tmp != NULL; tmp = tmp->ai_next) {
         sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
@@ -222,7 +239,8 @@ int main(int argc, char const *argv[]) {
         pthread_create(&th, NULL, handle_client, (void *)ctx);
     }
 
-    hashmap_free(global_map);    
+    hashmap_free(global_map);
+    expiration_map_free(expiration_map);    
     
     close(sock);
     freeaddrinfo(result);
