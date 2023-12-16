@@ -43,6 +43,8 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_TTL;
                 } else if (strcmp(line, "KEYS") == 0) {
                     cmd.type = CMD_KEYS;
+                } else if (strcmp(line, "PTTL") == 0) {
+                    cmd.type = CMD_PTTL;
                 } else { 
                     cmd.type = CMD_UNKNOWN;
                 }
@@ -75,7 +77,7 @@ Command parse_command(const char *input) {
                 if (line_count == 2) {
                     strncpy(cmd.key, line, sizeof(cmd.key) - 1);
                 }
-            } else if (cmd.type == CMD_TTL) {
+            } else if (cmd.type == CMD_TTL || cmd.type == CMD_PTTL) {
                 if (line_count == 2) {
                     strncpy(cmd.key, line, sizeof(cmd.key) - 1);
                 }
