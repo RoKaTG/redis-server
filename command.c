@@ -39,20 +39,6 @@ const char* handle_get_command(const char *key) {
     return response;
 }
 
-/*const char* handle_del_command(Command cmd) {
-    static char response[256];
-    int count = 0;
-    for (int i = 0; i < cmd.num_keys; ++i) {
-        if (hashmap_remove(global_map, cmd.keys[i])) {
-            count++;
-        } else if (!hashmap_remove(global_map, cmd.keys[i]) && count > -1) {
-            count--;
-        }
-    }
-    snprintf(response, sizeof(response), ":%d\r\n", count + 1);
-    return response;
-}*/
-
 const char* handle_del_command(Command cmd) {
     static char response[256];
     int count = 0;
@@ -99,63 +85,6 @@ int handle_append_command(const char *key, const char *value) {
     free(new_value);
 
     return appended_length;
-}
-
-/*int handle_incr_command(const char *key) {
-    char *existing_value = hashmap_get(global_map, key);
-    long long int value = (existing_value) ? atoll(existing_value) : 0;
-    value++;
-
-    char new_value[256];
-    snprintf(new_value, sizeof(new_value), "%lld", value);
-    hashmap_set(global_map, key, new_value);
-
-    return value;
-}*/
-
-/*const char* handle_incr_command(const char *key) {
-    static char response[256];
-
-    char *value = hashmap_get(global_map, key);
-    if (value) {
-        char *endptr;
-        long val = strtol(value, &endptr, 10);
-        if (*endptr != '\0') {
-            return "-ERR value is not an integer or out of range\r\n";
-        }
-
-        val++;
-        snprintf(response, sizeof(response), ":%ld\r\n", val);
-
-        char new_value[256];
-        snprintf(new_value, sizeof(new_value), "%ld", val);
-        hashmap_set(global_map, key, new_value);
-    } else {
-        hashmap_set(global_map, key, "1");
-        strcpy(response, ":1\r\n");
-    }
-
-    return response;
-}*/
-
-const char* handle_incr_command(Command cmd) {
-    char *value = hashmap_get(global_map, cmd.key);
-    long long number;
-
-    if (value && sscanf(value, "%lld", &number) == 1) {
-        number++;
-        char updated_value[256];
-        snprintf(updated_value, sizeof(updated_value), "%lld", number);
-        hashmap_set(global_map, cmd.key, updated_value);
-        static char response[256];
-        snprintf(response, sizeof(response), ":%lld\r\n", number);
-        return response;
-    } else if (!value) {
-        hashmap_set(global_map, cmd.key, "1");
-        return ":1\r\n";
-    } else {
-        return "-ERR value is not an integer or out of range\r\n";
-    }
 }
 
 const char* handle_randomkey_command(hashmap *h) {

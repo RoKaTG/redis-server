@@ -31,8 +31,6 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_EXISTS;
                 } else if (strcmp(line, "APPEND") == 0) {
                     cmd.type = CMD_APPEND;
-                } else if (strcmp(line, "INCR") == 0) {
-                    cmd.type = CMD_INCR;
                 } else if (strcmp(line, "RANDOMKEY") == 0) {
                     cmd.type = CMD_RANDOMKEY;
                 } else { 
