@@ -115,6 +115,16 @@ void *handle_client(void *pctx) {
                 snprintf(append_response, sizeof(append_response), ":%d\r\n", append_length);
                 response = append_response;
                 break;
+            case CMD_INCR:
+                /*int incr_value = handle_incr_command(cmd.key);
+                char incr_response[256];
+                snprintf(incr_response, sizeof(incr_response), ":%d\r\n", incr_value);
+                response = incr_response;*/
+                response = handle_incr_command(cmd);
+                break;
+            case CMD_RANDOMKEY:
+                response = handle_randomkey_command(global_map);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
