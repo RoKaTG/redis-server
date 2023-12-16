@@ -127,6 +127,9 @@ void *handle_client(void *pctx) {
             case CMD_PEXPIRE:
                 response = handle_pexpire_command(cmd.key, atoi(cmd.value));
                 break;
+            case CMD_PERSIST:
+                response = handle_persist_command(cmd.key);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
