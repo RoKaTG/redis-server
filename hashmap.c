@@ -102,13 +102,13 @@ expiration* expiration_map_create() {
     return map;
 }
 
-void expiration_map_set(expiration *map, const char *key, time_t expiration_time) {
+void expiration_map_set(expiration *map, const char *key, long long expiration_time) {
     int slot = hash(key);
     expiration_entry *entry = map->entries[slot];
 
     while (entry != NULL) {
         if (strcmp(entry->key, key) == 0) {
-            entry->expiration_time = expiration_time;
+            entry->expiration_time_ms = expiration_time;
             return;
         }
         entry = entry->next;
@@ -116,7 +116,7 @@ void expiration_map_set(expiration *map, const char *key, time_t expiration_time
 
     entry = malloc(sizeof(expiration_entry));
     strncpy(entry->key, key, sizeof(entry->key));
-    entry->expiration_time = expiration_time;
+    entry->expiration_time_ms = expiration_time;
     entry->next = map->entries[slot];
     map->entries[slot] = entry;
 }
@@ -142,14 +142,14 @@ void expiration_map_remove(expiration *map, const char *key) {
 }
 
 void check_and_remove_expired_keys(hashmap *h, expiration *map) {
-    time_t current_time = time(NULL);
+    long long current_time_ms = time(NULL) * 1000LL;
 
     for (int i = 0; i < HASHMAP_SIZE; ++i) {
         expiration_entry *entry = map->entries[i];
         expiration_entry *prev = NULL;
 
         while (entry != NULL) {
-            if (entry->expiration_time <= current_time) {
+            if (entry->expiration_time_ms <= current_time_ms) {
                 hashmap_remove(h, entry->key);
 
                 if (prev == NULL) {

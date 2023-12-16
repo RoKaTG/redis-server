@@ -18,7 +18,7 @@ typedef struct {
 
 typedef struct expiration_entry {
     char key[256];
-    time_t expiration_time;
+    long long expiration_time_ms;
     struct expiration_entry *next;
 } expiration_entry;
 
@@ -34,7 +34,7 @@ void hashmap_free(hashmap *h);
 int hashmap_remove(hashmap *h, const char *key);
 
 expiration* expiration_map_create();
-void expiration_map_set(expiration *map, const char *key, time_t expiration_time);
+void expiration_map_set(expiration *map, const char *key, long long expiration_time);
 void expiration_map_remove(expiration *map, const char *key);
 void check_and_remove_expired_keys(hashmap *h, expiration *map);
 void expiration_map_free(expiration *map);
