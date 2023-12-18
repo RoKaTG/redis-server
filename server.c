@@ -139,6 +139,12 @@ void *handle_client(void *pctx) {
             case CMD_COPY:
                 response = handle_copy_command(cmd.key, cmd.value);
                 break;
+            case CMD_INCR:
+                response = handle_incr_command(cmd.key);
+                break;
+            case CMD_DECR:
+                response = handle_decr_command(cmd.key);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
