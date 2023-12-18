@@ -18,6 +18,7 @@ typedef enum {
     CMD_PTTL,
     CMD_KEYS,
     CMD_RENAME,
+    CMD_COPY,
     CMD_UNKNOWN 
 } CommandType;
 
