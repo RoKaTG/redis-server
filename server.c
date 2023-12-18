@@ -136,6 +136,9 @@ void *handle_client(void *pctx) {
             case CMD_RENAME:
                 response = handle_rename_command(cmd.key, cmd.value);
                 break;
+            case CMD_COPY:
+                response = handle_copy_command(cmd.key, cmd.value);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
