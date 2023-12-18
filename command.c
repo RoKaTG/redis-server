@@ -298,3 +298,53 @@ const char* handle_copy_command(const char *source, const char *destination) {
     snprintf(response, sizeof(response), ":%d\r\n", 1);
     return response;
 }
+
+const char* handle_incr_command(const char *key) {
+    static char response[256];
+
+    char *value = hashmap_get(global_map, key);
+    long long number;
+
+    if (value == NULL) {
+        number = 0;
+    } else {
+        char *endptr;
+        number = strtoll(value, &endptr, 10);
+        if (*endptr != '\0') {
+            return "-ERR value is not an integer or out of range\r\n";
+        }
+    }
+
+    number++;
+    char new_value[256];
+    snprintf(new_value, sizeof(new_value), "%lld", number);
+    hashmap_set(global_map, key, new_value);
+
+    snprintf(response, sizeof(response), ":%lld\r\n", number);
+    return response;
+}
+
+const char* handle_decr_command(const char *key) {
+    static char response[256];
+
+    char *value = hashmap_get(global_map, key);
+    long long number;
+
+    if (value == NULL) {
+        number = 0;
+    } else {
+        char *endptr;
+        number = strtoll(value, &endptr, 10);
+        if (*endptr != '\0') {
+            return "-ERR value is not an integer or out of range\r\n";
+        }
+    }
+
+    number--;
+    char new_value[256];
+    snprintf(new_value, sizeof(new_value), "%lld", number);
+    hashmap_set(global_map, key, new_value);
+
+    snprintf(response, sizeof(response), ":%lld\r\n", number);
+    return response;
+}

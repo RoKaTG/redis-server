@@ -34,4 +34,7 @@ const char* handle_keys_command(const char *pattern);
 const char* handle_rename_command(const char *key, const char *newkey);
 const char* handle_copy_command(const char *source, const char *destination);
 
+const char* handle_incr_command(const char *key);
+const char* handle_decr_command(const char *key);
+
 #endif // COMMAND_H
