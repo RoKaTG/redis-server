@@ -348,3 +348,67 @@ const char* handle_decr_command(const char *key) {
     snprintf(response, sizeof(response), ":%lld\r\n", number);
     return response;
 }
+
+const char* handle_incrby_command(const char *key, const char *increment) {
+    static char response[256];
+
+    char *value = hashmap_get(global_map, key);
+    long long number;
+
+    if (value == NULL) {
+        number = 0;
+    } else {
+        char *endptr;
+        number = strtoll(value, &endptr, 10);
+        if (*endptr != '\0') {
+            return "-ERR value is not an integer or out of range\r\n";
+        }
+    }
+
+    long long increment_value;
+    char *endptr;
+    increment_value = strtoll(increment, &endptr, 10);
+    if (*endptr != '\0') {
+        return "-ERR increment is not an integer or out of range\r\n";
+    }
+
+    number += increment_value;
+    char new_value[256];
+    snprintf(new_value, sizeof(new_value), "%lld", number);
+    hashmap_set(global_map, key, new_value);
+
+    snprintf(response, sizeof(response), ":%lld\r\n", number);
+    return response;
+}
+
+const char* handle_decrby_command(const char *key, const char *increment) {
+    static char response[256];
+
+    char *value = hashmap_get(global_map, key);
+    long long number;
+
+    if (value == NULL) {
+        number = 0;
+    } else {
+        char *endptr;
+        number = strtoll(value, &endptr, 10);
+        if (*endptr != '\0') {
+            return "-ERR value is not an integer or out of range\r\n";
+        }
+    }
+
+    long long increment_value;
+    char *endptr;
+    increment_value = strtoll(increment, &endptr, 10);
+    if (*endptr != '\0') {
+        return "-ERR increment is not an integer or out of range\r\n";
+    }
+
+    number -= increment_value;
+    char new_value[256];
+    snprintf(new_value, sizeof(new_value), "%lld", number);
+    hashmap_set(global_map, key, new_value);
+
+    snprintf(response, sizeof(response), ":%lld\r\n", number);
+    return response;
+}
