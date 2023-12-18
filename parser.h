@@ -19,6 +19,8 @@ typedef enum {
     CMD_KEYS,
     CMD_RENAME,
     CMD_COPY,
+    CMD_INCR,
+    CMD_DECR,
     CMD_UNKNOWN 
 } CommandType;
 
