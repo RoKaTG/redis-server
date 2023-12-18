@@ -279,3 +279,22 @@ const char* handle_rename_command(const char *key, const char *newkey) {
     strcpy(response, "+OK\r\n");
     return response;
 }
+
+const char* handle_copy_command(const char *source, const char *destination) {
+    static char response[256];
+
+    char *value = hashmap_get(global_map, source);
+    if (value == NULL) {
+        snprintf(response, sizeof(response), ":%d\r\n", 0);
+        return response;
+    }
+
+    if (hashmap_get(global_map, destination) != NULL) {
+        snprintf(response, sizeof(response), ":%d\r\n", 0);
+        return response;
+    }
+
+    hashmap_set(global_map, destination, value);
+    snprintf(response, sizeof(response), ":%d\r\n", 1);
+    return response;
+}
