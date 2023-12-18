@@ -145,6 +145,12 @@ void *handle_client(void *pctx) {
             case CMD_DECR:
                 response = handle_decr_command(cmd.key);
                 break;
+            case CMD_INCRBY:
+                response = handle_incrby_command(cmd.key, cmd.value);
+                break;
+            case CMD_DECRBY:
+                response = handle_decrby_command(cmd.key, cmd.value);
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
