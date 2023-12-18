@@ -21,6 +21,8 @@ typedef enum {
     CMD_COPY,
     CMD_INCR,
     CMD_DECR,
+    CMD_INCRBY,
+    CMD_DECRBY,
     CMD_UNKNOWN 
 } CommandType;
 
