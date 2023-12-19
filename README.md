@@ -8,41 +8,41 @@ Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ense
 
    ```shell
    git clone https://github.com/votre_utilisateur/serveur-redis-minimaliste.git
-
+   ```
     Accédez au répertoire du projet :
 
-    shell
+    ```shell
 
 cd serveur-redis-minimaliste
-
+```
 Compilez le serveur en utilisant la commande make :
 
-shell
+```shell
 
     make
-
+```
 Utilisation
 
     Démarrez le serveur en spécifiant un numéro de port (par exemple, 8080) :
 
-    shell
+    ```shell
 
 ./server 8080
-
+```
 Le serveur Redis minimaliste est maintenant en cours d'exécution sur le port spécifié.
 
 Pour utiliser le client Redis en ligne de commande, ouvrez une nouvelle fenêtre de terminal et utilisez la commande redis-cli en spécifiant le même numéro de port que le serveur :
 
-shell
+```shell
 
 redis-cli -p 8080
-
+```
 Vous pouvez maintenant utiliser les commandes Redis prises en charge. Par exemple, pour obtenir de l'aide sur les commandes disponibles, tapez :
 
-shell
+```shell
 
     HELPER
-
+```
     Cela affichera une liste de commandes prises en charge avec leurs descriptions.
 
 Commandes prises en charge
