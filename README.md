@@ -9,7 +9,7 @@ Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ense
 ```shell
    git clone https://github.com/votre_utilisateur/serveur-redis-minimaliste.git
 ```
-    Accédez au répertoire du projet :
+ Accédez au répertoire du projet :
 
 ```shell
 
@@ -22,7 +22,7 @@ Compilez le serveur en utilisant la commande make :
 ```
 Utilisation
 
-    Démarrez le serveur en spécifiant un numéro de port (par exemple, 8080) :
+   Démarrez le serveur en spécifiant un numéro de port (par exemple, 8080) :
 
 ```shell
 
@@ -42,7 +42,7 @@ Vous pouvez maintenant utiliser les commandes Redis prises en charge. Par exempl
 
     HELPER
 ```
-    Cela affichera une liste de commandes prises en charge avec leurs descriptions.
+   Cela affichera une liste de commandes prises en charge avec leurs descriptions.
 
 Commandes prises en charge
 
