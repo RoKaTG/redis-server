@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "command.h"
+#include "../utils/utils.h"
 
 extern hashmap *global_map;
 extern expiration *expiration_map;
@@ -106,29 +107,6 @@ const char* handle_randomkey_command(hashmap *h) {
     return response;
 }
 
-bool hashmap_is_empty(hashmap *h) {
-    for (int i = 0; i < HASHMAP_SIZE; i++) {
-        if (h->entries[i] != NULL) {
-            return false;
-        }
-    }
-    return true;
-}
-
-char* get_random_key(hashmap *h) {
-    if (hashmap_is_empty(h)) {
-        return NULL;
-    }
-
-    srand(time(NULL));
-    while (1) {
-        int index = rand() % HASHMAP_SIZE;
-        if (h->entries[index] != NULL) {
-            return h->entries[index]->key;
-        }
-    }
-}
-
 const char* handle_expire_command(const char *key, int seconds) {
     static char response[256];
     long long current_time_ms = time(NULL) * 1000LL;
@@ -213,25 +191,6 @@ const char* handle_pttl_command(const char *key) {
     int pttl = (int)(expiration_time_ms - current_time_ms);
     snprintf(response, sizeof(response), ":%d\r\n", pttl > 0 ? pttl : -1);
     return response;
-}
-
-int match_pattern(const char *pattern, const char *key) {
-    while (*pattern && *key) {
-        if (*pattern == '*') {
-            return 1;
-        }
-        if (*pattern != '?' && *pattern != *key) {
-            return 0;
-        }
-        pattern++;
-        key++;
-    }
-    if (*pattern == '\0' && *key == '\0') {
-        return 1;
-    } else if (*pattern == '*' || *pattern == '\0') {
-        return 1;
-    }
-    return 0;
 }
 
 const char* handle_keys_command(const char *pattern) {

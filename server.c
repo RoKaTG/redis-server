@@ -11,12 +11,15 @@
 
 #include <signal.h>
 
-#include "parser.h"
-#include "command.h"
-#include "hashmap.h"
-#include "cJSON.h"
+#include "parser/parser.h"
+#include "handler/command.h"
+#include "struct/hashmap.h"
+#include "utils/utils.h"
 
 #define CHECK_INTERVAL 5
+
+
+//faire etape 2 puis 3 puis 1 de la partie avancé = mieux
 
 hashmap *global_map;
 expiration *expiration_map;
@@ -26,58 +29,6 @@ struct th_info {
     int fd;  // Descripteur de fichier pour le socket client
     int i;   // Identifiant du client (pour référence)
 };
-
-void save_to_file(hashmap *h, const char *filename) {
-    FILE *file = fopen(filename, "w");
-    if (!file) return;
-
-    cJSON *root = cJSON_CreateObject();
-
-    for (int i = 0; i < HASHMAP_SIZE; ++i) {
-        hashmap_entry *entry = h->entries[i];
-        while (entry) {
-            cJSON_AddStringToObject(root, entry->key, entry->value);
-            entry = entry->next;
-        }
-    }
-
-    char *json_data = cJSON_Print(root);
-    fprintf(file, "%s", json_data);
-    free(json_data);
-    cJSON_Delete(root);
-    fclose(file);
-}
-
-
-void load_from_file(hashmap *h, const char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (!file) return;
-
-    fseek(file, 0, SEEK_END);
-    long file_size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
-    char *json_data = malloc(file_size + 1);
-    if (!json_data) {
-        fclose(file);
-        return;
-    }
-
-    fread(json_data, 1, file_size, file);
-    json_data[file_size] = '\0'; 
-
-    cJSON *root = cJSON_Parse(json_data);
-    cJSON *current_element = NULL;
-    cJSON_ArrayForEach(current_element, root) {
-        const char *key = current_element->string;
-        const char *value = cJSON_GetStringValue(current_element);
-        hashmap_set(h, key, value);
-    }
-
-    cJSON_Delete(root);
-    free(json_data);
-    fclose(file);
-}
 
 
 void *handle_client(void *pctx) {
