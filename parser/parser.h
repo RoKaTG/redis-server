@@ -1,8 +1,10 @@
-#ifndef PARSER_H
-#define PARSER_H
+#pragma once
 
 #define MAX_KEYS 100
 
+
+
+/*****************ENUMERATION FOR EVERY COMMANDs******************/
 typedef enum {
     CMD_PING,
     CMD_SET,
@@ -28,6 +30,7 @@ typedef enum {
 } CommandType;
 
 
+/*****************COMMAND STRUCTURE FOR COMMAND ARGUMENTs MANAGEMENT******************/
 typedef struct {
     CommandType type;
     char key[256];
@@ -40,5 +43,4 @@ typedef struct {
 
 Command parse_command(const char *input);
 
-#endif // PARSER_H
 

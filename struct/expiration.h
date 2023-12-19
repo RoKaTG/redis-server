@@ -1,8 +1,10 @@
-#ifndef EXPIRATION_H
-#define EXPIRATION_H
+#pragma once
 
 #include "hashmap.h"
 
+
+
+/*****************STRUCT USED FOR TIME"STAMP" LIFE MANAGEMENT******************/
 typedef struct expiration_entry {
     char key[256];
     long long expiration_time_ms;
@@ -13,6 +15,8 @@ typedef struct {
     expiration_entry **entries;
 } expiration;
 
+
+/*****************FUNCTION USED TO MANAGE THE LIFE TIME OF A KEY******************/
 expiration* expiration_map_create();
 void expiration_map_set(expiration *map, const char *key, long long expiration_time);
 void expiration_map_remove(expiration *map, const char *key);
@@ -22,4 +26,3 @@ int expiration_map_exists(expiration *map, const char *key);
 
 long long get_expiration_time_ms(expiration *map, const char *key);
 
-#endif // EXPIRATION_H
