@@ -6,26 +6,25 @@ Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ense
 
 1. Clonez ce dépôt sur votre système local en utilisant la commande suivante :
 
-   ```shell
+```shell
    git clone https://github.com/votre_utilisateur/serveur-redis-minimaliste.git
-   ```
+```
     Accédez au répertoire du projet :
 
-    ```shell
+```shell
 
 cd serveur-redis-minimaliste
 ```
 Compilez le serveur en utilisant la commande make :
 
 ```shell
-
     make
 ```
 Utilisation
 
     Démarrez le serveur en spécifiant un numéro de port (par exemple, 8080) :
 
-    ```shell
+```shell
 
 ./server 8080
 ```
