@@ -13,7 +13,7 @@ git clone https://github.com/RoKaTG/redis-server.git
 
 ```shell
 
-cd serveur-redis-minimaliste
+cd ~/redis-server
 ```
 Compilez le serveur en utilisant la commande make :
 
