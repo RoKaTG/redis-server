@@ -42,7 +42,7 @@ Vous pouvez maintenant utiliser les commandes Redis prises en charge. Par exempl
 
 HELPER
 ```
-   Cela affichera une liste de commandes prises en charge avec leurs descriptions.
+   Cela affichera une liste de commandes prises en charge avec leurs descriptions (malheureusement l'affichage est bugué pour le client mais s'affiche parfaitement usr le prompt du serveur)
 
 Commandes prises en charge
 
