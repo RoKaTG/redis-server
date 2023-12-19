@@ -1,70 +1,71 @@
 # Serveur Redis
 
-Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ensemble de commandes Redis de base telles que PING, SET, GET, DEL, et d'autres. Le but de ce serveur est de servir d'exemple éducatif pour comprendre le fonctionnement interne d'un serveur Redis simplifié.
+This project is a Red-is server implemented in C. It provides a set of basic Redis commands such as PING, SET, GET, DEL, and others. The purpose of this server is to serve as an educational example for understanding the internal workings of a server communicating with Redis.
 
 ## Installation
 
-1. Clonez ce dépôt sur votre système local en utilisant la commande suivante :
+1.Clone this repository to your local system using the following command :
 
 ```shell
 git clone https://github.com/RoKaTG/redis-server.git
 ```
- Accédez au répertoire du projet :
+Navigate to the project directory:
 
 ```shell
 
 cd ~/redis-server
 ```
-Compilez le serveur en utilisant la commande make :
+Compile the server using the make command:
 
 ```shell
 make
 ```
-Utilisation
+Usage
 
-   Démarrez le serveur en spécifiant un numéro de port (par exemple, 8080) :
+   Start the server by specifying a port number (e.g., 8080):
 
 ```shell
 
 ./server 8080
 ```
-Le serveur Redis minimaliste est maintenant en cours d'exécution sur le port spécifié.
+The Red-is server is now running on the specified port.
 
-Pour utiliser le client Redis en ligne de commande, ouvrez une nouvelle fenêtre de terminal et utilisez la commande redis-cli en spécifiant le même numéro de port que le serveur :
+To use the Redis command-line client, open a new terminal window and use the redis-cli command, specifying the same port number as the server:
 
 ```shell
 
 redis-cli -p 8080
 ```
-Vous pouvez maintenant utiliser les commandes Redis prises en charge. Par exemple, pour obtenir de l'aide sur les commandes disponibles, tapez :
+You can now use the supported Redis commands. For example, to get help on available commands, type:
 
 ```shell
 
 HELPER
 ```
-   Cela affichera une liste de commandes prises en charge avec leurs descriptions (malheureusement l'affichage est bugué pour le client mais s'affiche parfaitement usr le prompt du serveur)
+   This will display a list of supported commands with their descriptions (unfortunately, the display is buggy in the client but appears perfectly on the server prompt).
 
-Commandes prises en charge
+Supported Commands
 
-    PING: Teste la connectivité au serveur.
-    SET key value: Définit la valeur d'une clé.
-    GET key: Récupère la valeur d'une clé.
-    DEL key [key ...]: Supprime une ou plusieurs clés.
-    EXISTS key [key ...]: Vérifie si une ou plusieurs clés existent.
-    APPEND key value: Ajoute une valeur à la fin de la clé.
-    RANDOMKEY: Retourne une clé aléatoire.
-    EXPIRE key seconds: Définit un délai d'expiration sur une clé.
-    PEXPIRE key milliseconds: Définit un délai d'expiration sur une clé en millisecondes.
-    PERSIST key: Supprime le délai d'expiration d'une clé.
-    TTL key: Obtient le temps restant avant expiration d'une clé en secondes.
-    PTTL key: Obtient le temps restant avant expiration d'une clé en millisecondes.
-    KEYS pattern: Trouve toutes les clés correspondant au motif donné.
-    RENAME key newkey: Renomme une clé.
-    COPY source destination: Copie la valeur d'une clé vers une autre.
-    INCR key: Incrémente la valeur numérique d'une clé.
-    DECR key: Décrémente la valeur numérique d'une clé.
-    INCRBY key increment: Incrémente la valeur numérique d'une clé par un montant donné.
-    DECRBY key decrement: Décrémente la valeur numérique d'une clé par un montant donné.
+    PING: Tests server connectivity.
+    SET key value: Sets the value of a key.
+    GET key: Retrieves the value of a key.
+    DEL key [key ...]: Deletes one or more keys.
+    EXISTS key [key ...]: Checks if one or more keys exist.
+    APPEND key value: Appends a value to the end of a key.
+    RANDOMKEY: Returns a random key.
+    EXPIRE key seconds: Sets an expiration time on a key (in seconds).
+    PEXPIRE key milliseconds: Sets an expiration time on a key (in milliseconds).
+    PERSIST key: Removes the expiration time of a key.
+    TTL key: Gets the remaining time until a key's expiration (in seconds).
+    PTTL key: Gets the remaining time until a key's expiration (in milliseconds).
+    KEYS pattern: Finds all keys matching the given pattern.
+    RENAME key newkey: Renames a key.
+    COPY source destination: Copies the value of a key to another key.
+    INCR key: Increments the numeric value of a key.
+    DECR key: Decrements the numeric value of a key.
+    INCRBY key increment: Increments the numeric value of a key by a given amount.
+    DECRBY key decrement: Decrements the numeric value of a key by a given amount.
 
-Au niveau des fonctionnalités, j'ai normalement compléter la partie BASE et INTERMEDIAIRE du sujet (sauf les requête concurrentes ou je n'ai pas eu le temps d'intégrer les mutex et les deadlock dans chaque fonctionnalités faites) et je n'ai pas pu touché à la partie AVANCEE du projet.
-©MSILINI Yassine
+In terms of functionality, I have completed the BASE and INTERMEDIATE parts of the project (except for concurrent requests where I did not have time to integrate mutexes and deadlocks in each implemented functionality), and I have not been able to work on the ADVANCED part of the project.
+
+© MSILINI Yassine

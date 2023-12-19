@@ -27,26 +27,34 @@
 hashmap *global_map;
 expiration *expiration_map;
 
-// Structure pour stocker les informations du thread
+// Structure for storing thread information
 struct th_info {
-    int fd;  // Descripteur de fichier pour le socket client
-    int i;   // Identifiant du client (pour référence)
+int fd; // File descriptor for the client socket
+int i; // Client identifier (for reference)
 };
 
-
 void *handle_client(void *pctx) {
+    // Cast the context pointer to the appropriate struct type
     struct th_info *ctx = (struct th_info *)pctx;
+    
+    // Get the client file descriptor from the context
     int client_fd = ctx->fd;
+
+    // Create a buffer to read client data
     char buffer[1024] = {0};
 
     int read_bytes = read(client_fd, buffer, 1024);
     if (read_bytes > 0) {
-        buffer[read_bytes] = '\0'; 
-        printf("Reçu : %s\n", buffer); // Log pour débogage
+        buffer[read_bytes] = '\0';
+        
+        // Log received data for debugging
+        printf("Received : %s\n", buffer);
 
+        // Parse the command from the received data
         Command cmd = parse_command(buffer);
         const char* response;
 
+        // Handle different command types
         switch (cmd.type) {
             case CMD_PING:
                 response = handle_ping_command(cmd.argument);
@@ -109,11 +117,13 @@ void *handle_client(void *pctx) {
                 response = handle_helper_command();
                 break;
             case CMD_UNKNOWN:
-            //default:
-                response = "-Commande inconnue\r\n";
+            // Handle default behavior
+                response = "-Unknown command\r\n";
         }
 
-        printf("Réponse : %s\n", response); // Log pour débogage
+        printf("Response : %s\n", response);
+
+        // Write the response back to the client
         write(client_fd, response, strlen(response));
     }
 
@@ -124,7 +134,7 @@ void *handle_client(void *pctx) {
 }
 
 void signal_handler(int signum) {
-    printf("Arrêt du serveur...\n");
+    printf("\nServer is closing...\n");
     save_to_file(global_map, "data.json");
     exit(signum);
 }
@@ -227,7 +237,7 @@ printf(
     }
 
     if (server_ready == 0) {
-        fprintf(stderr, "Le serveur n'a pas pu démarrer\n");
+        fprintf(stderr, "The server couldn't start.\n");
         return 1;
     }
 
@@ -262,9 +272,6 @@ printf(
     
     close(sock);
     freeaddrinfo(result);
-
-    //save_to_file(global_map, "data.json");
-
     return 0;
 }
 
