@@ -18,6 +18,9 @@
 
 #define CHECK_INTERVAL 5
 
+#define RED "\x1b[31m"
+#define RS "\x1b[0m"
+
 
 //faire etape 2 puis 3 puis 1 de la partie avancé = mieux
 
@@ -102,6 +105,9 @@ void *handle_client(void *pctx) {
             case CMD_DECRBY:
                 response = handle_decrby_command(cmd.key, cmd.value);
                 break;
+            case CMD_HELPER:
+                response = handle_helper_command();
+                break;
             case CMD_UNKNOWN:
             //default:
                 response = "-Commande inconnue\r\n";
@@ -130,58 +136,39 @@ void *expiration_checker(void *arg) {
     }
 }
 
-void print_welcome_message() {
-    const char *ascii_art_1 = "ICI VA VOTRE PREMIER TEXTE ASCII";
-    const char *ascii_art_2 = 
-"   _____     __  __     _ _ _       _  __   __            _                      ____  _  ______ \n"
-"  / ___ \\   |  \\/  |___(_) (_)_ __ (_) \\ \\ / /_ _ ___ ___(_)_ __   ___          |  _ \\| |/ / ___|\n"
-" / / __| \\  | |\\/| / __| | | | '_ \\| |  \\ V / _` / __/ __| | '_ \\ / _ \\  _____  | |_) | ' / |  _ \n"
-"| | (__   | | |  | \\__ \\ | | | | | | |   | | (_| \\__ \\__ \\ | | | |  __/ |_____| |  _ <| . \\ |_| |\n"
-" \\ \\___| /  |_|  |_|___/_|_|_|_| |_|_|   |_|\\__,_|___/___/_|_| |_|\\___|         |_| \\_\\_|\\_\\____|\n"
-"  \\_____/                                                                                        \n";
-
-
-
-    printf("%s\n", ascii_art_1);
-    printf("%s\n", ascii_art_2);
-    printf("Welcome to the AISE Redis-inspired server!\n");
-    printf("This server offers several Redis functionalities for educational purposes.\n");
-    printf("Type HELP for a list of commands and their manual.\n\n");
-}
-
 
 int main(int argc, char const *argv[]) {                                                                             
-    printf("\x1b[31m"); printf("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
-    printf("\x1b[31m"); printf("█████████████████░░████████████████░░█████████████████\n");   printf("\x1b[0m");
-    printf("\x1b[31m"); printf("█░ ____        ░█░░ _____          ░░█░ ____        ░█\n");   printf("\x1b[0m");   
-    printf("\x1b[31m"); printf("█░|  _ \\       ░█░░| ____|         ░░█░|  _ \\       ░█\n");   printf("\x1b[0m");   
-    printf("\x1b[31m"); printf("█░| |_)|       ░█░░|  _|           ░░█░| | | |      ░█\n");     printf("\x1b[0m");  
-    printf("\x1b[31m"); printf("█░|  _/<       ░█░░| |___          ░░█░| |_| |      ░█\n");     printf("\x1b[0m");   
-    printf("\x1b[31m"); printf("█░|_| \\_\\      ░█░░|_____|         ░░█░|____/       ░█\n");   printf("\x1b[0m"); 
-    printf("\x1b[31m"); printf("█████████████████░░████████████████░░█████████████████\n");   printf("\x1b[0m");
-    printf("\x1b[31m"); printf("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");   printf("\x1b[0m");
+    printf(RED "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ \n" RS);
+    printf(RED "█████████████████░░████████████████░░█████████████████\n" RS);
+    printf(RED "█░ ____        ░█░░ _____          ░░█░ ____        ░█" RS " ___ ____    ____  _____ ______     _______ ____        \n");   
+    printf(RED "█░|  _ \\       ░█░░| ____|         ░░█░|  _ \\       ░█" RS "|_ _/ ___|  / ___|| ____|  _ \\ \\   / / ____|  _ \\    \n");   
+    printf(RED "█░| |_)|       ░█░░|  _|           ░░█░| | | |      ░█" RS " | |\\___ \\  \\___ \\|  _| | |_) \\ \\ / /|  _| | |_) |\n");  
+    printf(RED "█░|  _<        ░█░░| |___          ░░█░| |_| |      ░█"RS " | | ___) |  ___) | |___|  _ < \\ V / | |___|  _ <      \n");   
+    printf(RED "█░|_| \\_\\      ░█░░|_____|         ░░█░|____/       ░█" RS "|___|____/  |____/|_____|_| \\_\\ \\_/  |_____|_| \\_\\ \n"); 
+    printf(RED "█████████████████░░████████████████░░█████████████████\n" RS);
+    printf(RED "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" RS);
 
-    
+printf("\n\n");
+
 printf(
-" ___ ____    ____  _____ ______     _______ ____                 _____             ____  _  ______ \n"
-"|_ _/ ___|  / ___|| ____|  _ \\ \\   / / ____|  _ \\               / ___ \\           |  _ \\| |/ / ___|\n"
-" | |\\___ \\  \\___ \\|  _| | |_) \\ \\ / /|  _| | |_) |             / / __| \\   _____  | |_) | ' / |  _ \n"
-" | | ___) |  ___) | |___|  _ < \\ V / | |___|  _ <             | | (__   | |_____| |  _ <| . \\ |_| |\n"
-"|___|____/  |____/|_____|_| \\_\\ \\_/  |_____|_| \\_\\             \\ \\___| /          |_| \\_\\_|\\_\\____|\n"
-"                                                                \\_____/                            \n");
+"   _____             ____  _  ______ \n"
+"  / ___ \\           |  _ \\| |/ / ___|\n"
+" / / __| \\   _____  | |_) | ' / |  _ \n"
+"| | (__   | |_____| |  _ <| . \\ |_| |\n"
+" \\ \\___| /          |_| \\_\\_|\\_\\____|\n"
+"  \\_____/                            \n");
 
-
-
+    printf("\n\n");
     printf("Welcome to the AISE Redis-inspired server!\n");
     printf("This server offers several Redis functionalities for educational purposes.\n");
     printf("How to Use This Server:\n");
     printf("1. Open a new command prompt or terminal window for the client.\n");
     printf("2. Connect to the server using the Redis CLI: redis-cli -p <port> (Note : Replace <port> with the port number your server is listening on.)\n");
-    printf("3. Once connected, type HELP to get a list of available commands and their usage.\n");
+    printf("3. Once connected, type" RED " HELPER" RS " to get a list of available commands and their usage.\n");
     printf("4. Use the connected terminal as your client to interact with the server.\n\n");
 
     printf("To stop the server, press CTRL+C in the server's terminal window.\n");
-    printf("To disconnect the client, also press CTRL+C in the client's terminal window.\n\n");
+    printf("To disconnect the client, also press CTRL+C or type <exit> in the client's terminal window.\n\n");
 
 
     signal(SIGINT, signal_handler);
