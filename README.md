@@ -1,4 +1,4 @@
-# Serveur Redis Minimaliste
+# Serveur Redis
 
 Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ensemble de commandes Redis de base telles que PING, SET, GET, DEL, et d'autres. Le but de ce serveur est de servir d'exemple éducatif pour comprendre le fonctionnement interne d'un serveur Redis simplifié.
 
@@ -7,7 +7,7 @@ Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ense
 1. Clonez ce dépôt sur votre système local en utilisant la commande suivante :
 
 ```shell
-   git clone https://github.com/votre_utilisateur/serveur-redis-minimaliste.git
+   git clone https://github.com/RoKaTG/redis-server.git
 ```
  Accédez au répertoire du projet :
 
@@ -65,3 +65,5 @@ Commandes prises en charge
     DECR key: Décrémente la valeur numérique d'une clé.
     INCRBY key increment: Incrémente la valeur numérique d'une clé par un montant donné.
     DECRBY key decrement: Décrémente la valeur numérique d'une clé par un montant donné.
+
+©MSILINI Yassine
