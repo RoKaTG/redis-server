@@ -4,6 +4,11 @@
 #include "expiration.h"
 #include "hashmap.h"
 
+/**
+ * Create a new expiration map.
+ *
+ * @return A pointer to the newly created expiration map.
+ */
 expiration* expiration_map_create() {
     expiration *map = malloc(sizeof(expiration));
     map->entries = malloc(sizeof(expiration_entry*) * HASHMAP_SIZE);
@@ -13,6 +18,13 @@ expiration* expiration_map_create() {
     return map;
 }
 
+/**
+ * Set the expiration time for a given key in the expiration map.
+ *
+ * @param map The expiration map.
+ * @param key The key to set expiration for.
+ * @param expiration_time The expiration time in milliseconds.
+ */
 void expiration_map_set(expiration *map, const char *key, long long expiration_time) {
     int slot = hash(key);
     expiration_entry *entry = map->entries[slot];
@@ -32,6 +44,12 @@ void expiration_map_set(expiration *map, const char *key, long long expiration_t
     map->entries[slot] = entry;
 }
 
+/**
+ * Remove a key from the expiration map.
+ *
+ * @param map The expiration map.
+ * @param key The key to remove.
+ */
 void expiration_map_remove(expiration *map, const char *key) {
     int slot = hash(key);
     expiration_entry *entry = map->entries[slot];
@@ -52,6 +70,12 @@ void expiration_map_remove(expiration *map, const char *key) {
     }
 }
 
+/**
+ * Check and remove expired keys from the hashmap and expiration map.
+ *
+ * @param h The hashmap.
+ * @param map The expiration map.
+ */
 void check_and_remove_expired_keys(hashmap *h, expiration *map) {
     long long current_time_ms = time(NULL) * 1000LL;
 
@@ -80,6 +104,11 @@ void check_and_remove_expired_keys(hashmap *h, expiration *map) {
     }
 }
 
+/**
+ * Free memory used by the expiration map.
+ *
+ * @param map The expiration map to free.
+ */
 void expiration_map_free(expiration *map) {
     if (map == NULL) return;
 
@@ -95,6 +124,13 @@ void expiration_map_free(expiration *map) {
     free(map);
 }
 
+/**
+ * Check if a key exists in the expiration map.
+ *
+ * @param map The expiration map.
+ * @param key The key to check.
+ * @return 1 if the key exists, 0 otherwise.
+ */
 int expiration_map_exists(expiration *map, const char *key) {
     int slot = hash(key);
     expiration_entry *entry = map->entries[slot];
@@ -108,6 +144,13 @@ int expiration_map_exists(expiration *map, const char *key) {
     return 0;
 }
 
+/**
+ * Get the expiration time in milliseconds for a given key.
+ *
+ * @param map The expiration map.
+ * @param key The key to get expiration time for.
+ * @return The expiration time in milliseconds, or 0 if the key does not exist.
+ */
 long long get_expiration_time_ms(expiration *map, const char *key) {
     int slot = hash(key);
     expiration_entry *entry = map->entries[slot];
@@ -120,4 +163,3 @@ long long get_expiration_time_ms(expiration *map, const char *key) {
     }
     return 0;
 }
-

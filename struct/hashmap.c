@@ -5,6 +5,12 @@
 
 #define HASHMAP_SIZE 1024
 
+/**
+ * Hash function to calculate the slot index for a given key.
+ *
+ * @param key The input key.
+ * @return The slot index in the hashmap.
+ */
 unsigned int hash(const char *key) {
     unsigned long int value = 0;
     unsigned int i = 0;
@@ -16,6 +22,11 @@ unsigned int hash(const char *key) {
     return value % HASHMAP_SIZE;
 }
 
+/**
+ * Create a new hashmap and initialize it.
+ *
+ * @return A pointer to the newly created hashmap.
+ */
 hashmap* hashmap_create() {
     hashmap *h = malloc(sizeof(hashmap));
     h->entries = malloc(sizeof(hashmap_entry*) * HASHMAP_SIZE);
@@ -27,6 +38,13 @@ hashmap* hashmap_create() {
     return h;
 }
 
+/**
+ * Set a key-value pair in the hashmap.
+ *
+ * @param h The hashmap.
+ * @param key The key to set.
+ * @param value The value to associate with the key.
+ */
 void hashmap_set(hashmap *h, const char *key, const char *value) {
     unsigned int slot = hash(key);
     hashmap_entry *entry = h->entries[slot];
@@ -46,6 +64,13 @@ void hashmap_set(hashmap *h, const char *key, const char *value) {
     h->entries[slot] = entry;
 }
 
+/**
+ * Get the value associated with a key from the hashmap.
+ *
+ * @param h The hashmap.
+ * @param key The key to look up.
+ * @return The value associated with the key, or NULL if the key is not found.
+ */
 char* hashmap_get(hashmap *h, const char *key) {
     unsigned int slot = hash(key);
     hashmap_entry *entry = h->entries[slot];
@@ -59,6 +84,11 @@ char* hashmap_get(hashmap *h, const char *key) {
     return NULL;
 }
 
+/**
+ * Free the memory used by the hashmap.
+ *
+ * @param h The hashmap to free.
+ */
 void hashmap_free(hashmap *h) {
     for (int i = 0; i < HASHMAP_SIZE; ++i) {
         hashmap_entry *entry = h->entries[i];
@@ -72,6 +102,13 @@ void hashmap_free(hashmap *h) {
     free(h);
 }
 
+/**
+ * Remove a key-value pair from the hashmap.
+ *
+ * @param h The hashmap.
+ * @param key The key to remove.
+ * @return 1 if the key was removed, 0 if the key was not found.
+ */
 int hashmap_remove(hashmap *h, const char *key) {
     unsigned int slot = hash(key);
     hashmap_entry *entry = h->entries[slot];

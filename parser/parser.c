@@ -8,6 +8,8 @@ Command parse_command(const char *input) {
 
     /*******************I parse the commands by separating the strings that are spaced 
      *(so command + argument etc.) and I put each of them to a new line to make parsing easier****************************/
+    
+    // Initialize a Command struct
     Command cmd;
     memset(&cmd, 0, sizeof(Command));
 
@@ -17,10 +19,12 @@ Command parse_command(const char *input) {
 
     while (line != NULL) {
 
+        // Parse the number of keys in the command
         if (line[0] == '*') {
             sscanf(line, "*%d", &cmd.num_keys);
         } 
         
+        // No need to worry about the argument length
         else if (line[0] == '$') {
         } 
         
@@ -138,6 +142,7 @@ Command parse_command(const char *input) {
                 }
             } 
             
+            // Handle commands with variable numbers of keys
             else if ((cmd.type == CMD_EXISTS || cmd.type == CMD_DEL) && key_index < MAX_KEYS) {
                 strncpy(cmd.keys[key_index], line, sizeof(cmd.keys[0]) - 1);
                 key_index++;
