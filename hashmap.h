@@ -5,6 +5,16 @@
 
 #include <time.h>
 
+/*typedef struct list_node {
+    char *value;
+    struct list_node *next;
+} list_node;
+
+typedef struct {
+    list_node *head;
+} list;
+*/
+
 typedef struct hashmap_entry {
     char key[256];
     char value[256];
