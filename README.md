@@ -66,4 +66,5 @@ Commandes prises en charge
     INCRBY key increment: Incrémente la valeur numérique d'une clé par un montant donné.
     DECRBY key decrement: Décrémente la valeur numérique d'une clé par un montant donné.
 
+Au niveau des fonctionnalités, j'ai normalement compléter la partie BASE et INTERMEDIAIRE du sujet (sauf les requête concurrentes ou je n'ai pas eu le temps d'intégrer les mutex et les deadlock dans chaque fonctionnalités faites) et je n'ai pas pu touché à la partie AVANCEE du projet.
 ©MSILINI Yassine
