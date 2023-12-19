@@ -371,3 +371,37 @@ const char* handle_decrby_command(const char *key, const char *increment) {
     snprintf(response, sizeof(response), ":%lld\r\n", number);
     return response;
 }
+
+const char* handle_helper_command() {
+    static char help_text[4096];
+
+    const char* help_content =
+        "Commands:\n"
+        "PING: Teste la connectivité au serveur.\n"
+        "SET key value: Définit la valeur d'une clé.\n"
+        "GET key: Récupère la valeur d'une clé.\n"
+        "DEL key [key ...]: Supprime une ou plusieurs clés.\n"
+        "EXISTS key [key ...]: Vérifie si une ou plusieurs clés existent.\n"
+        "APPEND key value: Ajoute une valeur à la fin de la clé.\n"
+        "RANDOMKEY: Retourne une clé aléatoire.\n"
+        "EXPIRE key seconds: Définit un délai d'expiration sur une clé.\n"
+        "PEXPIRE key milliseconds: Définit un délai d'expiration sur une clé en millisecondes.\n"
+        "PERSIST key: Supprime le délai d'expiration d'une clé.\n"
+        "TTL key: Obtient le temps restant avant expiration d'une clé en secondes.\n"
+        "PTTL key: Obtient le temps restant avant expiration d'une clé en millisecondes.\n"
+        "KEYS pattern: Trouve toutes les clés correspondant au motif donné.\n"
+        "RENAME key newkey: Renomme une clé.\n"
+        "COPY source destination: Copie la valeur d'une clé vers une autre.\n"
+        "INCR key: Incrémente la valeur numérique d'une clé.\n"
+        "DECR key: Décrémente la valeur numérique d'une clé.\n"
+        "INCRBY key increment: Incrémente la valeur numérique d'une clé par un montant donné.\n"
+        "DECRBY key decrement: Décrémente la valeur numérique d'une clé par un montant donné.\n";
+
+    // Calculez la longueur de help_content, y compris le caractère de fin de chaîne '\0'
+    int help_content_length = strlen(help_content);
+
+    // Format de la réponse en vrac (multi-string)
+    snprintf(help_text, sizeof(help_text), "*2\r\n$%d\r\n%s\r\n$%d\r\n%s\r\n", help_content_length, help_content, help_content_length, help_content);
+
+    return help_text;
+}

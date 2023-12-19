@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#define MAX_KEYS 10
+#define MAX_KEYS 100
 
 typedef enum {
     CMD_PING,
@@ -23,6 +23,7 @@ typedef enum {
     CMD_DECR,
     CMD_INCRBY,
     CMD_DECRBY,
+    CMD_HELPER,
     CMD_UNKNOWN 
 } CommandType;
 

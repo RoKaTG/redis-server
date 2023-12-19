@@ -57,6 +57,8 @@ Command parse_command(const char *input) {
                     cmd.type = CMD_INCRBY;
                 } else if (strcmp(line, "DECRBY") == 0) {
                     cmd.type = CMD_DECRBY;
+                } else if (strcmp(line, "HELPER") == 0) {
+                    cmd.type = CMD_HELPER;
                 } else { 
                     cmd.type = CMD_UNKNOWN;
                 }

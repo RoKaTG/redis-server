@@ -24,5 +24,6 @@ const char* handle_incr_command(const char *key);
 const char* handle_decr_command(const char *key);
 const char* handle_incrby_command(const char *key, const char *increment);
 const char* handle_decrby_command(const char *key, const char *increment);
+const char* handle_helper_command();
 
 #endif // COMMAND_H
