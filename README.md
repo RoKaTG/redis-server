@@ -7,7 +7,7 @@ Ce projet est un serveur Redis minimaliste implémenté en C. Il fournit un ense
 1. Clonez ce dépôt sur votre système local en utilisant la commande suivante :
 
 ```shell
-   git clone https://github.com/RoKaTG/redis-server.git
+git clone https://github.com/RoKaTG/redis-server.git
 ```
  Accédez au répertoire du projet :
 
@@ -18,7 +18,7 @@ cd serveur-redis-minimaliste
 Compilez le serveur en utilisant la commande make :
 
 ```shell
-    make
+make
 ```
 Utilisation
 
@@ -40,7 +40,7 @@ Vous pouvez maintenant utiliser les commandes Redis prises en charge. Par exempl
 
 ```shell
 
-    HELPER
+HELPER
 ```
    Cela affichera une liste de commandes prises en charge avec leurs descriptions.
 
