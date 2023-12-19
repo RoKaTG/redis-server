@@ -225,8 +225,7 @@ printf(
     printf("This server offers several Redis functionalities for educational purposes.\n");
     printf("How to Use This Server:\n");
     printf("1. Open a new command prompt or terminal window for the client.\n");
-    printf("2. Connect to the server using the Redis CLI: redis-cli -p <port> *\n");
-    printf("(* : Replace <port> with the port number your server is listening on.)\n");
+    printf("2. Connect to the server using the Redis CLI: redis-cli -p <port> (Note : Replace <port> with the port number your server is listening on.)\n");
     printf("3. Once connected, type HELP to get a list of available commands and their usage.\n");
     printf("4. Use the connected terminal as your client to interact with the server.\n\n");
 
